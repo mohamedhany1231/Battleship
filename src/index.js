@@ -1,17 +1,33 @@
-import GameBoard from "./gameBoard";
+import NPC from "./npc";
+import Player from "./player";
+import createBoard, { endGame } from "./interface";
 
-let myBoard = new GameBoard();
+export function createGame() {
+  let player1 = new Player("YOU");
+  let npc = new NPC();
 
-console.log(myBoard.board);
-myBoard.placeShip(5, 2, 3);
-myBoard.placeShip(4, 0, 0, false);
-myBoard.placeShip(2, 9, 9);
-console.log(myBoard.shipCount);
+  player1.placeTitan();
+  player1.placeMiniTitan();
+  player1.placeNormalShip();
+  player1.placeSmallestShip();
 
-console.log(myBoard.board);
-myBoard.receiveAttack(0, 0);
-myBoard.receiveAttack(0, 0);
-myBoard.receiveAttack(0, 2);
-myBoard.receiveAttack(0, 1);
-myBoard.receiveAttack(0, 3);
-console.log(myBoard.shipCount);
+  npc.placeTitan();
+  npc.placeMiniTitan();
+  npc.placeNormalShip();
+  npc.placeSmallestShip();
+
+  createBoard(player1, npc);
+  createBoard(npc, player1);
+}
+export function isGameOver(player1, player2) {
+  if (player1.board.shipCount == 0) {
+    endGame(player2.name);
+    return true;
+  } else if (player2.board.shipCount == 0) {
+    endGame(player1.name);
+    return true;
+  }
+  return false;
+}
+
+createGame();
